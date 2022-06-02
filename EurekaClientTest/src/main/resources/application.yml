@@ -1,0 +1,65 @@
+server:
+#  port: 9001
+  port: 0 # Use Random Port
+
+spring:
+  application:
+    name: user-service
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
+      path: /user-service/h2-console
+  datasource:
+    driver-class-name: org.h2.Driver
+    jdbc-url: "jdbc:h2:mem:testdb"
+    username: "sa"
+    password: ""
+    hikari:
+      connection-timeout: 5000
+      validation-timeout: 1000
+      minimum-idle: 5
+      max-lifetime: 2400000
+      maximum-pool-size: 20
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 100
+        dialect: org.hibernate.dialect.H2Dialect
+        enable_lazy_load_no_trans: false
+      show_sql: true
+      generate-ddl: true
+  sql:
+    init:
+      mode: always
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
+
+#Eureka Server에 해당 service instance 를 등록
+eureka:
+  instance:
+#    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+messages:
+  health-check: "server instance working"
+
+token:
+  expiration_time: 60000
+  secret: "user-service"
+
+logging:
+  level:
+    root: info
