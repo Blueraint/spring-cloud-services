@@ -24,7 +24,9 @@ public class UserController {
 
     @GetMapping("/health-check")
     public String status() {
-        return String.format("[msg] %s  [port] %s", env.getProperty("messages.health-check"), env.getProperty("local.server.port"));
+        return String.format("[msg] %s  [port] %s  [token secret] %s  [token expire time] %s",
+                env.getProperty("messages.health-check"), env.getProperty("local.server.port"),
+                env.getProperty("token.secret"), env.getProperty("token.expiration_time"));
     }
 
     @PostMapping("/users")

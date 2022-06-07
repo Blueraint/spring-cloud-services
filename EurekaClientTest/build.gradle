@@ -32,6 +32,11 @@ dependencies {
 	implementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.0")
 	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
 
+	// implementation for spring cloud config
+	implementation 'org.springframework.cloud:spring-cloud-starter-config'
+	implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
 
 	runtimeOnly group: 'com.h2database', name: 'h2', version: '1.3.176'
 	compileOnly 'org.projectlombok:lombok'

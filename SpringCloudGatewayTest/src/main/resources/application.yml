@@ -78,6 +78,16 @@ spring:
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
             - AuthorizationHeaderFilter
 
+        #user-service's actuator
+        - id: user-service
+          uri: lb://USER-SERVICE # eureka server's application name
+          predicates:
+            - Path=/user-service/actuator/**
+            - Method=GET,POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+
         - id: catalog-service
           uri: lb://CATALOG-SERVICE # eureka server's application name
           predicates:
@@ -87,9 +97,19 @@ spring:
           uri: lb://ORDER-SERVICE # eureka server's application name
           predicates:
             - Path=/order-service/**
+    # properties for spring cloud config server
+#    config:
+#      uri: http://localhost:8888
+#      name: ecommerce
 logging:
   level:
     root: info
 
-token:
-  secret: "user-service"
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans, httptrace
+
+#token:
+#  secret: "user-service"

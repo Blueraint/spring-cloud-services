@@ -36,6 +36,11 @@ spring:
   sql:
     init:
       mode: always
+  #properties for spring cloud
+#  cloud:
+#    config:
+#      uri: http://localhost:8888
+#      name: ecommerce
 
 decorator:
   datasource:
@@ -56,9 +61,17 @@ eureka:
 messages:
   health-check: "server instance working"
 
-token:
-  expiration_time: 60000
-  secret: "user-service"
+#token:
+#  expiration_time: 60000
+#  secret: "user-service"
+
+# Config for spring actuator
+# Refresh 시 error 발생...값은 정상으로 변경되나 변경값의 Datasource를 물고오지 못하는듯하다(bootstrap.yml 문제인듯>?)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans
 
 logging:
   level:
