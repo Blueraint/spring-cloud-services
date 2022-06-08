@@ -5,8 +5,23 @@ server:
 spring:
   application:
     name: config-service
+  rabbitmq:
+    host: 10.0.2.15
+    port: 5672
+    username: admin
+    password: admin
   cloud:
     config:
+#      server:
+#        git:
       server:
+        bootstrap: true
         git:
           uri: file:///home/shin/git/springWorkspace/springcloud-properties-repo
+          default-label: main
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, busrefresh # spring cloud bus(rabbitmq)'s refresh

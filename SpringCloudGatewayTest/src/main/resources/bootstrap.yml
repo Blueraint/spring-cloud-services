@@ -1,11 +1,14 @@
 spring:
   cloud:
     config:
+      server:
+        bootstrap: true
       uri: http://localhost:8888
-      name: ecommerce
+      name: config-service
+#      name: ecommerce
       #server:
         #native:
           #search-locations: file://${user.home}/...
-  profiles:
-    active: dev
+#  profiles:
+#    active: dev
     #active: native

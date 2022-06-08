@@ -12,10 +12,11 @@ spring:
         web-allow-others: true
       path: /user-service/h2-console
   datasource:
-    driver-class-name: org.h2.Driver
-    jdbc-url: "jdbc:h2:mem:testdb"
-    username: "sa"
-    password: ""
+    #datasource properties is moved to {cloud.config.git.uri}/user-service.yml
+#    driver-class-name: org.h2.Driver
+#    jdbc-url: "jdbc:h2:mem:testdb"
+#    username: "sa"
+#    password: ""
     hikari:
       connection-timeout: 5000
       validation-timeout: 1000
@@ -36,6 +37,12 @@ spring:
   sql:
     init:
       mode: always
+  rabbitmq:
+    host: 10.0.2.15
+    port: 5672
+    username: admin
+    password: admin
+
   #properties for spring cloud
 #  cloud:
 #    config:
@@ -71,7 +78,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: refresh, health, beans
+        include: refresh, health, beans, busrefresh
 
 logging:
   level:

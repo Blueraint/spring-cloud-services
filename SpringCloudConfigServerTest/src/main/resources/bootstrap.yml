@@ -1,0 +1,18 @@
+#Encryption for application properties files(use restcontroller localhost:port/encrypt (POST method))
+
+# symmetric Encryption(대칭키)
+#encrypt:
+#  key: abcde12345
+
+# Asymmetric Encryption(비대칭키)
+## keytool usage
+
+### Generate PrivateKey : bash) keytool -genkeypair -alias apiEncryptionKey -keyalg RSA -dname "CN=sdh, OU=Spring Cloud API Dev, O=sdh.co.kr, L=Seoul, C=KR" -keypass "123456" -keystore apiEncryptionKey.jks -storepass "123456"
+
+### Generate Public CertFile(인증서) : bash) keytool -export -alias apiEncryptionKey -keystore apiEncryptionKey.jks -rfc -file trustServer.cer
+### Generate PublicKey : bash) keytool -import -alias trustServer -file trustServer.cer -keystore publicKey.jks
+encrypt:
+  key-store:
+    location: file:///home/shin/git/keystore/apiEncryptionKey.jks
+    password: 123456
+    alias: apiEncryptionKey
