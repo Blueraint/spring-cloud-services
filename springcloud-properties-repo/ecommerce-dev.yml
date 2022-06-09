@@ -1,0 +1,7 @@
+token:
+  expiration_time: 60000
+  secret: "user-service-dev"
+
+gateway:
+  ip: 10.0.2.15
+

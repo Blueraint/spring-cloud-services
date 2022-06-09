@@ -1,0 +1,15 @@
+# This is properties for encryption dataresource data
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    jdbc-url: "jdbc:h2:mem:testdb"
+    username: "sa"
+#password(symmetric encryption)
+#    password: '{cipher}f9c1e80c72c545fb10788cce673208fee0db021e9f05506a2e2a7c189ca87049'
+
+#password(Asymmetric encryption)
+    password: '{cipher}AQCEjFKWJkdQVVCia98mE8seA3eOPPWAQhtASCtZCTVg6MXkADEfkCOVmyleP049rz5YjjvX2aEfebq12YOV2AMXdJUPkdAyRVUYoVbziTB3NqGNbmeVVoajrFYI3q/tmrPK2DJLe+aeNqjBonH4zmLORnIauyl7w1BR5gVkADRMrK4l7xfmyDCfL0T2gV56HIpjH80c3ecX1l5UiAnWOnyR6kA4ApZs3QXW493WzeoENbLK5iS3MiWX9pK9RmB8u1EAc4FrCaqcqVJKPiW0ypbEcw8xgqyNRyHgJ5aD7Ho+PIsgQIgG8at8RNYnBOro5SsO5xLbiA1kwjtTPFIRU+ox7Njs7CsflZtoVK8Wykx0qokyBr+a3h8Qeopj1w6Sd0g='
+
+order_service:
+  url: "http://ORDER-SERVICE/order-service/%s/orders"
+
