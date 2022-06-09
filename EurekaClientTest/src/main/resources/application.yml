@@ -83,3 +83,9 @@ management:
 logging:
   level:
     root: info
+    com.springcloud.EurekaClientTest.client: DEBUG
+
+#this properties will be inserted in git-repo
+msa:
+  order_service:
+    url: "http://ORDER-SERVICE/order-service/%s/orders"

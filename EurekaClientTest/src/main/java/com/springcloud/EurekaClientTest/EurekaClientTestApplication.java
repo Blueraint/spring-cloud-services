@@ -3,6 +3,7 @@ package com.springcloud.EurekaClientTest;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /**
  * SpringBoot Service 실행하기 위해...
@@ -17,6 +18,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  */
 @SpringBootApplication
 @EnableDiscoveryClient
+@EnableFeignClients
 public class EurekaClientTestApplication {
 
 	public static void main(String[] args) {
