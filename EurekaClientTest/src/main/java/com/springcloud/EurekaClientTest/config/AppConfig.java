@@ -1,5 +1,6 @@
 package com.springcloud.EurekaClientTest.config;
 
+import com.springcloud.EurekaClientTest.client.FeignErrorDecoder;
 import feign.Logger;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
@@ -24,5 +25,10 @@ public class AppConfig {
     @Bean
     public Logger.Level feignLoggerLevel() {
         return Logger.Level.FULL;
+    }
+
+    @Bean
+    public FeignErrorDecoder feignErrorDecoder() {
+        return new FeignErrorDecoder();
     }
 }

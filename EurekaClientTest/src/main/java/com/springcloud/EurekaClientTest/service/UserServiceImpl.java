@@ -1,5 +1,6 @@
 package com.springcloud.EurekaClientTest.service;
 
+import com.springcloud.EurekaClientTest.client.FeignErrorDecoder;
 import com.springcloud.EurekaClientTest.client.OrderServiceClient;
 import com.springcloud.EurekaClientTest.domain.Order;
 import com.springcloud.EurekaClientTest.domain.User;
@@ -12,6 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,10 +33,10 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder encoder;
     private final RestTemplate restTemplate;
-    private OrderServiceClient orderServiceClient;
+    private final Environment env;
+    private final OrderServiceClient orderServiceClient;
+    private final FeignErrorDecoder feignErrorDecoder;
 
-    @Value("${msa.order_service.url}")
-    private String orderServiceUrl;
 
     // by UserDetailService
     @Override
@@ -68,8 +70,9 @@ public class UserServiceImpl implements UserService {
         UserDto userDto = new ModelMapper().map(user, UserDto.class);
 
         // Get Orders From Order MicroService(RestTemplate)
+
         /*
-        String orderUrl = String.format(orderServiceUrl, userId);
+        String orderUrl = String.format(env.getProperty("order-service.url"), userId);
         ResponseEntity<List<Order>> orderRes =
                 restTemplate.exchange(orderUrl, HttpMethod.GET, null,
                         new ParameterizedTypeReference<List<Order>>() {
@@ -80,12 +83,18 @@ public class UserServiceImpl implements UserService {
         */
 
         // Get Orders From Order MicroService(FeignClient Interface)
+        /*
         List<Order> orderList = null;
         try {
             orderList = orderServiceClient.getOrders(userId);
         } catch(FeignException e) {
             log.error(e.getMessage());
         }
+         */
+
+        // ErrorDecoder에 의해 처리되므로 try-catch 로 Exception catch 하지 않아도 된다
+        List<Order> orderList = orderServiceClient.getOrders(userId);
+
         userDto.setOrderList(orderList);
 
         return userDto;
