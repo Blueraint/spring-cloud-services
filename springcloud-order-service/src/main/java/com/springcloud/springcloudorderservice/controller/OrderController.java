@@ -1,6 +1,7 @@
 package com.springcloud.springcloudorderservice.controller;
 
 import com.springcloud.springcloudorderservice.dto.OrderDto;
+import com.springcloud.springcloudorderservice.service.KafkaProducerService;
 import com.springcloud.springcloudorderservice.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,11 +17,11 @@ import java.util.List;
 @RequestMapping("/order-service")
 public class OrderController {
     private final Environment env;
+    private final OrderService orderService;
+    private final KafkaProducerService kafkaProducerService;
 
     @Value("${messages.health-check}")
     private String healthCheckMessage;
-
-    private final OrderService orderService;
 
     @GetMapping("/health-check")
     public String status() {
@@ -30,9 +31,17 @@ public class OrderController {
     @PostMapping("/{userId}/orders")
     public ResponseEntity createOrder(@PathVariable("userId") String userId, @RequestBody OrderDto orderDto) {
         orderDto.setUserId(userId);
-        OrderDto responseOrderDto = orderService.createOrder(orderDto);
 
-        return ResponseEntity.status(HttpStatus.OK).body(responseOrderDto);
+        // use Jpa
+//        OrderDto responseOrderDto = orderService.createOrder(orderDto);
+
+        // use Kafka
+        OrderDto responseOrderDto = kafkaProducerService.createOrder(orderDto);
+
+        // send orders to kafka topic
+        kafkaProducerService.send("example-order-topic", orderDto);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseOrderDto);
     }
 
     @GetMapping("{userId}/orders")

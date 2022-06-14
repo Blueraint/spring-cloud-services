@@ -1,0 +1,25 @@
+// (POST) http://localhost:8083/connectors
+
+/*
+* $KAFKA_CONNECT_HOME/etc/kafka/connect-distributed.properties 에 다음사항 추가
+key.converter=org.apache.kafka.connect.json.JsonConverter
+value.converter=org.apache.kafka.connect.json.JsonConverter
+key.converter.schemas.enable=false
+value.converter.schemas.enable=false
+*/
+{
+  "name" : "my-order-sink-connect",
+  "config" : {
+    "connector.class" : "io.confluent.connect.jdbc.JdbcSinkConnector",
+    "connection.url":"jdbc:mysql://localhost:3306/spring_cloud",
+    "connection.user":"root",
+    "connection.password":"root",
+    "auto.create":"true",
+    "auto.evolve":"true",
+    "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "delete.enabled":"false",
+    "tasks.max":"1",
+    "topics": "orders"
+  }
+}

@@ -5,17 +5,21 @@ server:
 spring:
   application:
     name: order-service
-  h2:
-    console:
-      enabled: true
-      settings:
-        web-allow-others: true
-      path: /order-service/h2-console
+#  h2:
+#    console:
+#      enabled: true
+#      settings:
+#        web-allow-others: true
+#      path: /order-service/h2-console
   datasource:
-    driver-class-name: org.h2.Driver
-    jdbc-url: "jdbc:h2:mem:testdb"
-    username: "sa"
-    password: ""
+#    driver-class-name: org.h2.Driver
+#    jdbc-url: "jdbc:h2:mem:testdb"
+#    username: "sa"
+#    password: ""
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: "jdbc:mysql://localhost:3306/spring_cloud"
+    username: "root"
+    password: "root"
     hikari:
       connection-timeout: 5000
       validation-timeout: 1000
@@ -24,12 +28,14 @@ spring:
       maximum-pool-size: 20
   jpa:
     hibernate:
-      ddl-auto: create-drop
+#      ddl-auto: create-drop
+      ddl-auto: none
     properties:
       hibernate:
         format_sql: true
         default_batch_fetch_size: 100
-        dialect: org.hibernate.dialect.H2Dialect
+#        dialect: org.hibernate.dialect.H2Dialect
+        dialect: org.hibernate.dialect.MySQL8Dialect
         enable_lazy_load_no_trans: false
       show-sql: true
       generate-ddl: true
