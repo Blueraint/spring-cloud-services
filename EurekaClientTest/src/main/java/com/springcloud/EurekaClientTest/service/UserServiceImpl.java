@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
@@ -36,6 +38,7 @@ public class UserServiceImpl implements UserService {
     private final Environment env;
     private final OrderServiceClient orderServiceClient;
     private final FeignErrorDecoder feignErrorDecoder;
+    private final CircuitBreakerFactory circuitBreakerFactory;
 
 
     // by UserDetailService
@@ -93,7 +96,14 @@ public class UserServiceImpl implements UserService {
          */
 
         // ErrorDecoder에 의해 처리되므로 try-catch 로 Exception catch 하지 않아도 된다
-        List<Order> orderList = orderServiceClient.getOrders(userId);
+        // CircuitBreaker(resilience4j) 를 이용하여 MicroService 간 connection 등 문제가 생기는 경우 접근을 차단할 수 있도록 한다(ErrorDecoder 이용하지 않아도 됨)
+//        List<Order> orderList = orderServiceClient.getOrders(userId);
+        log.info("Before Call Orders MicroService.");
+        CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitbreaker");
+        // circuitBreaker 의 동작방식 지정 : method 를 실행하고, 에러가 나는경우 빈 List를 반환한다(Optional과 사용법 유사)
+        List<Order> orderList = circuitBreaker.run(() -> orderServiceClient.getOrders(userId),
+                throwable -> new ArrayList<>());
+        log.info("After Call Orders MicroService.");
 
         userDto.setOrderList(orderList);
 

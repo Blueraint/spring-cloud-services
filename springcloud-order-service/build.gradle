@@ -34,6 +34,9 @@ dependencies {
 	implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.29'
 	implementation group: 'org.springframework.kafka', name: 'spring-kafka', version: '2.8.6'
 
+	implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
+	// zipkin-server-exec-jar url : https://repo1.maven.org/maven2/io/zipkin/zipkin-server/2.23.0/
+	implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-zipkin', version: '2.2.8.RELEASE'
 
 
 	runtimeOnly group: 'com.h2database', name: 'h2', version: '1.3.176'

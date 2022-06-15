@@ -37,7 +37,7 @@ public class UserController {
         UserDto userDto = modelMapper.map(requestUser, UserDto.class);
         userService.createUser(userDto);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(requestUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
     }
 
     @GetMapping("/users")

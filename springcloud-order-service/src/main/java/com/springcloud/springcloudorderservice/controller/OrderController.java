@@ -4,6 +4,7 @@ import com.springcloud.springcloudorderservice.dto.OrderDto;
 import com.springcloud.springcloudorderservice.service.KafkaProducerService;
 import com.springcloud.springcloudorderservice.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/order-service")
@@ -30,17 +32,20 @@ public class OrderController {
 
     @PostMapping("/{userId}/orders")
     public ResponseEntity createOrder(@PathVariable("userId") String userId, @RequestBody OrderDto orderDto) {
+        log.info("Before Add Orders MicroService Data.");
+
         orderDto.setUserId(userId);
 
         // use Jpa
-//        OrderDto responseOrderDto = orderService.createOrder(orderDto);
+        OrderDto responseOrderDto = orderService.createOrder(orderDto);
 
         // use Kafka
-        OrderDto responseOrderDto = kafkaProducerService.createOrder(orderDto);
+//        OrderDto responseOrderDto = kafkaProducerService.createOrder(orderDto);
 
         // send orders to kafka topic
-        kafkaProducerService.send("example-order-topic", orderDto);
+//        kafkaProducerService.send("example-order-topic", orderDto);
 
+        log.info("After Add Orders MicroService Data.");
         return ResponseEntity.status(HttpStatus.CREATED).body(responseOrderDto);
     }
 
@@ -52,8 +57,20 @@ public class OrderController {
     }
 
     @GetMapping("{orderId}/order")
-    public ResponseEntity<OrderDto> getOrdersByOrderId(@PathVariable("orderId") String orderId) {
+    public ResponseEntity<OrderDto> getOrdersByOrderId(@PathVariable("orderId") String orderId) throws Exception {
+        log.info("Before Retrieve Orders MicroService Data.");
         OrderDto orderDto = orderService.getOrderByOrderId(orderId);
+
+        // 강제 Error 발생
+        /*
+        try {
+            Thread.sleep(1000);
+            throw new Exception("Error Occured.");
+        }catch(InterruptedException e) {
+            log.error(e.getMessage());
+        }
+         */
+        log.info("After Retrieve Orders MicroService Data.");
 
         return ResponseEntity.status(HttpStatus.OK).body(orderDto);
     }
