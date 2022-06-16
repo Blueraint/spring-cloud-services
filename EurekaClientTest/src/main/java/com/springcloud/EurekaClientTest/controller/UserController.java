@@ -4,6 +4,7 @@ import com.springcloud.EurekaClientTest.domain.RequestUser;
 import com.springcloud.EurekaClientTest.domain.User;
 import com.springcloud.EurekaClientTest.dto.UserDto;
 import com.springcloud.EurekaClientTest.service.UserService;
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -23,6 +24,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/health-check")
+    @Timed(value = "users.status", longTask = true)
     public String status() {
         return String.format("[msg] %s  [port] %s  [token secret] %s  [token expire time] %s",
                 env.getProperty("messages.health-check"), env.getProperty("local.server.port"),

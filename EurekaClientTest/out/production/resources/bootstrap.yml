@@ -1,0 +1,11 @@
+spring:
+  cloud:
+    config:
+      server:
+        bootstrap: true
+      uri: http://localhost:8888
+      name: user-service
+#      name: config-service
+#      name: ecommerce
+#  profiles:
+#    active: dev

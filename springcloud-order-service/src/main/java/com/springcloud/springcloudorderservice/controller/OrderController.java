@@ -3,6 +3,7 @@ package com.springcloud.springcloudorderservice.controller;
 import com.springcloud.springcloudorderservice.dto.OrderDto;
 import com.springcloud.springcloudorderservice.service.KafkaProducerService;
 import com.springcloud.springcloudorderservice.service.OrderService;
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +27,7 @@ public class OrderController {
     private String healthCheckMessage;
 
     @GetMapping("/health-check")
+    @Timed(value = "orders.status", longTask = true)
     public String status() {
         return String.format("[msg] %s  [port] %s", healthCheckMessage, env.getProperty("local.server.port"));
     }

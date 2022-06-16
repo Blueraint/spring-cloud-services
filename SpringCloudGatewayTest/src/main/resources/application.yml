@@ -73,16 +73,6 @@ spring:
             - RemoveRequestHeader=Cookie
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
 
-        - id: user-service
-          uri: lb://USER-SERVICE # eureka server's application name
-          predicates:
-            - Path=/user-service/**
-            - Method=GET
-          filters:
-            - RemoveRequestHeader=Cookie
-            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
-            - AuthorizationHeaderFilter
-
         #user-service's actuator
         - id: user-service
           uri: lb://USER-SERVICE # eureka server's application name
@@ -93,15 +83,36 @@ spring:
             - RemoveRequestHeader=Cookie
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
 
+        - id: user-service
+          uri: lb://USER-SERVICE # eureka server's application name
+          predicates:
+            - Path=/user-service/**
+            - Method=GET
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
+
         - id: catalog-service
           uri: lb://CATALOG-SERVICE # eureka server's application name
           predicates:
             - Path=/catalog-service/**
 
+        #order-service's actuator
+        - id: order-service
+          uri: lb://ORDER-SERVICE # eureka server's application name
+          predicates:
+            - Path=/order-service/actuator/**
+            - Method=GET,POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/order-service/(?<segment>.*), /$\{segment}
+
         - id: order-service
           uri: lb://ORDER-SERVICE # eureka server's application name
           predicates:
             - Path=/order-service/**
+
     # properties for spring cloud config server
 #    config:
 #      uri: http://localhost:8888
@@ -114,7 +125,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: refresh, health, beans, httptrace, busrefresh
+        include: refresh, health, beans, httptrace, busrefresh, info, metrics, prometheus
 
 #token:
 #  secret: "user-service"

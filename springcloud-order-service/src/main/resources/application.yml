@@ -72,5 +72,12 @@ logging:
   level:
     com.springcloud.springcloudorderservice: DEBUG
 
+# Config for spring actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, httptrace, beans, info, metrics, prometheus
+
 messages:
   health-check: "server instance working"
